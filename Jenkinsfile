@@ -15,7 +15,7 @@ pipeline {
         stage('Build Container') {
                     steps {
                         script {
-                            dockerID = docker.build('./webServer')
+                            dockerID = docker.build('netanelped/finalprojet:${env.BUILD_ID}')
                             echo $dockerID
                         }
 
