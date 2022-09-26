@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'origin/*']], extensions: [], userRemoteConfigs: [[credentialsId: 'HIT', url: 'https://github.com/NetanelPeduim/finalProject.git']]]
+                checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'main/*']], extensions: [], userRemoteConfigs: [[credentialsId: 'HIT', url: 'https://github.com/NetanelPeduim/finalProject.git']]]
                 // Get some code from a GitHub repository
                 //git 'https://github.com/jglick/simple-maven-project-with-tests.git'
 
@@ -23,7 +23,7 @@ pipeline {
         stage('Build Container') {
                     steps {
                         script {
-                            dockerID = docker.build './webServer'
+                            dockerID = docker.build 'https://github.com/NetanelPeduim/finalProject.git#main:/webServer/.'
                             echo $dockerID
                         }
 
