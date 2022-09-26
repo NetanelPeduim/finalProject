@@ -1,5 +1,6 @@
 pipeline {
     agent any
+    dockerfile true
     triggers {
         pollSCM '* * * * *'
     }
@@ -10,13 +11,12 @@ pipeline {
         stage('Checkout') {
             steps {
                 checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'main/*']], extensions: [], userRemoteConfigs: [[credentialsId: 'HIT', url: 'https://github.com/NetanelPeduim/finalProject.git']]]
-                sh 'pwd'
             }
         }
         stage('Build Container') {
                     steps {
                         script {
-                            dockerID = docker.build('netanelped/finalprojet:${env.BUILD_ID}')
+                            dockerID = docker.build("hit-web-server:${env.BUILD_ID}")
                             echo $dockerID
                         }
 
