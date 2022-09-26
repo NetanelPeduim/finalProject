@@ -10,6 +10,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'main/*']], extensions: [], userRemoteConfigs: [[credentialsId: 'HIT', url: 'https://github.com/NetanelPeduim/finalProject.git']]]
+                script {pwd}
             }
         }
         stage('Build Container') {
