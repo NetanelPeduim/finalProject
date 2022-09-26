@@ -23,7 +23,7 @@ pipeline {
         stage('Build Container') {
                     steps {
                         script {
-                            dockerID = docker.build 'https://github.com/NetanelPeduim/finalProject.git#origin:.'
+                            dockerID = docker.build './webServer'
                             echo $dockerID
                         }
 
