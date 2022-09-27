@@ -46,7 +46,7 @@ public class webApplicationTests {
             driver.quit();
         }
         finally {
-            assertEquals(actualTitle,EXPECTED_TITLE);
+            assertEquals(EXPECTED_TITLE,actualTitle);
             driver.quit();
         }
     }

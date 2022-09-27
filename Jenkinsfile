@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                checkout changelog: true, poll: true, scm: [$class: 'GitSCM', branches: [[name: 'main/*']], extensions: [], userRemoteConfigs: [[credentialsId: 'HIT', url: 'https://github.com/NetanelPeduim/finalProject.git']]]
+                checkout changelog: true, poll: true, scm: [$class: 'GitSCM', branches: [[name: 'main']], extensions: [], userRemoteConfigs: [[credentialsId: 'HIT', url: 'https://github.com/NetanelPeduim/finalProject.git']]]
             }
         }
         stage('Build Container') {
@@ -60,6 +60,12 @@ pipeline {
                 sh 'gradle -p ./automation clean'
                 sh 'gradle -p ./automation test'
             }
+        }
+        stage('Test Results') {
+            steps {
+                junit '**/*.xml'
+            }
+
         }
     }
     post {
