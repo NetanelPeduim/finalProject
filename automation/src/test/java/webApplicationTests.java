@@ -11,7 +11,7 @@ public class webApplicationTests {
     private static final String EXPECTED_VALUE = "Received!";
     private static final int QA_PORT = 90;
     @Test
-    public void testWebApplication() {
+    public void testSeleniumWebApplication() {
         System.setProperty("webdriver.chrome.driver","chromedriver.exe");
         ChromeDriver driver;
         ChromeOptions options = new ChromeOptions();
@@ -27,10 +27,8 @@ public class webApplicationTests {
         assertEquals(value,EXPECTED_VALUE);
         driver.quit();
     }
-
-
     @Test
-    public void testUI(){
+    public void testWebpageName(){
         System.setProperty("webdriver.chrome.driver","chromedriver.exe");
         ChromeDriver driver;
         ChromeOptions options = new ChromeOptions();
