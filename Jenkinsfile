@@ -38,24 +38,27 @@ pipeline {
                 script {
                     def response
                     try {
-                        response = httpRequest validResponseCodes: '200', url: 'http://localhost:90'
+                        response = httpRequest quiet:true, validResponseCodes: '200', url: 'http://localhost:90'
                     }
                     catch(Exception e) {
                         currentBuild.result = 'FAILED'
                         error("Aborting the build.")
                     }
                     def status = response.status
-                    println "status is " + status
                     if(status != 200) {
-                        print "FAILED TEST"
+                        println "FAILED TEST"
                         exit()
+                    }
+                    else {
+                        println "WebServer is up!"
                     }
                 }
             }
         }
         stage('Running Selenium Tests') {
             steps {
-                sh './automation/gradlew test'
+                sh 'gradle -p ./automation clean'
+                sh 'gradle -p ./automation test'
             }
         }
     }

@@ -36,18 +36,18 @@ public class webApplicationTests {
         ChromeOptions options = new ChromeOptions();
         driver = new ChromeDriver(options);
         String url = "http://localhost" + ":" + QA_PORT;
+        String actualTitle = "";
         try {
             driver.get(url);
-            String actualTitle = driver.getTitle();
-            if (actualTitle.contentEquals(EXPECTED_TITLE)){
-                System.out.println("TEST PASSED!");
-            } else {
-                System.out.println("TEST FAILED - Title not as expected!");
-            }
+            actualTitle = driver.getTitle();
         }
         catch(Exception e) {
             System.out.println("TEST FAILED");
+            driver.quit();
         }
-        driver.quit();
+        finally {
+            assertEquals(actualTitle,EXPECTED_TITLE);
+            driver.quit();
+        }
     }
 }
