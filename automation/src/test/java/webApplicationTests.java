@@ -9,9 +9,6 @@ import java.time.Duration;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class webApplicationTests {
-    private static final String EXPECTED_TITLE = "localhost";
-    private static final String EXPECTED_VALUE = "Received!";
-    private static final int QA_PORT = 90;
     @Test
     public void testSeleniumWebApplication() {
         System.setProperty("webdriver.chrome.driver","chromedriver.exe");
@@ -26,7 +23,7 @@ public class webApplicationTests {
         submitButton.click();
         WebElement msg = driver.findElement(By.id("message"));
         String value = msg.getText();
-        assertEquals(value,EXPECTED_VALUE);
+        assertEquals(value,"Received!");
         driver.quit();
     }
     @Test
@@ -36,11 +33,11 @@ public class webApplicationTests {
         ChromeOptions options = new ChromeOptions();
         options.setPageLoadTimeout(Duration.ofMinutes(1));
         driver = new ChromeDriver(options);
-        String url = "http://localhost" + ":" + QA_PORT;
+        String url = "http://localhost" + ":" + 90;
         String actualTitle;
         driver.get(url);
         actualTitle = driver.getTitle();
-        assertEquals(EXPECTED_TITLE,actualTitle);
+        assertEquals("HIT - Devops course",actualTitle);
         driver.quit();
     }
 }
