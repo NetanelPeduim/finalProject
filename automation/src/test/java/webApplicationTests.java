@@ -34,9 +34,11 @@ public class webApplicationTests {
         options.setPageLoadTimeout(Duration.ofMinutes(1));
         driver = new ChromeDriver(options);
         String url = "http://localhost" + ":" + 90;
-        String actualTitle;
-        driver.get(url);
-        actualTitle = driver.getTitle();
+        String actualTitle = "";
+        try {
+            driver.get(url);
+            actualTitle = driver.getTitle();
+        } catch (Exception e) {}
         assertEquals("HIT - Devops course",actualTitle);
         driver.quit();
     }
