@@ -8,11 +8,17 @@ pipeline {
     }
     environment {
         DOCKERHUB_CREDS = credentials('dockerhub_token')
+        def deployToProd = false
+        def qaTestsPassed = false
     }
     stages {
         stage('Checkout') {
             steps {
                 checkout changelog: true, poll: true, scm: [$class: 'GitSCM', branches: [[name: 'main']], extensions: [], userRemoteConfigs: [[credentialsId: 'HIT', url: 'https://github.com/NetanelPeduim/finalProject.git']]]
+                result = sh (script: "git log -1 | grep 'v*'", returnStatus: true)
+                if (result != 0) {
+                    deployToProd = true
+                }
             }
         }
         stage('Build Container') {
@@ -51,6 +57,7 @@ pipeline {
                     }
                     else {
                         println "WebServer is up!"
+                        qaTestsPassed = true
                     }
                 }
             }
@@ -63,9 +70,24 @@ pipeline {
         }
         stage('Test Results') {
             steps {
-                junit '**/*.xml'
+                junit './automation/build/test-results/test/*.xml'
             }
-
+        }
+        stage('Deploy To Prod') {
+            steps {
+            echo 'shutting down application-qa container\n'
+            sh 'docker stop $(docker ps -aq)'
+            echo 'removing application-qa container\n'
+            sh 'docker rm $(docker ps -aq)'
+            if(deployToProd && qaTestsPassed) {
+                echo 'need to deploy to prod!\n'
+                echo 'revving up application to prod!'
+                sh "docker run -d -p 80:80 --name application-prod netanelped/${env.JOB_NAME}"
+            }
+            else {
+                    echo 'skipping deployment to prod!\n'
+                }
+            }
         }
     }
     post {
@@ -74,6 +96,7 @@ pipeline {
         }
         always {
             script {
+                echo 'stopping and removing ALL dockers..'
                 sh 'docker stop $(docker ps -aq)'
                 sh 'docker rm $(docker ps -aq)'
             }

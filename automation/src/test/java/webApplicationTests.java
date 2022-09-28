@@ -4,6 +4,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
+import java.time.Duration;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class webApplicationTests {
@@ -32,20 +34,13 @@ public class webApplicationTests {
         System.setProperty("webdriver.chrome.driver","chromedriver.exe");
         ChromeDriver driver;
         ChromeOptions options = new ChromeOptions();
+        options.setPageLoadTimeout(Duration.ofMinutes(1));
         driver = new ChromeDriver(options);
         String url = "http://localhost" + ":" + QA_PORT;
-        String actualTitle = "";
-        try {
-            driver.get(url);
-            actualTitle = driver.getTitle();
-        }
-        catch(Exception e) {
-            System.out.println("TEST FAILED");
-            driver.quit();
-        }
-        finally {
-            assertEquals(EXPECTED_TITLE,actualTitle);
-            driver.quit();
-        }
+        String actualTitle;
+        driver.get(url);
+        actualTitle = driver.getTitle();
+        assertEquals(EXPECTED_TITLE,actualTitle);
+        driver.quit();
     }
 }
