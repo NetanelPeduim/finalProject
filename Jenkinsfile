@@ -4,7 +4,7 @@ pipeline {
         pollSCM '* * * * *'
     }
     options {
-      timeout(time: 1, unit: 'MINUTES')
+      timeout(time: 2, unit: 'MINUTES')
     }
     environment {
         DOCKERHUB_CREDS = credentials('dockerhub_token')
@@ -15,10 +15,10 @@ pipeline {
         stage('Checkout') {
             steps {
                 checkout changelog: true, poll: true, scm: [$class: 'GitSCM', branches: [[name: 'main']], extensions: [], userRemoteConfigs: [[credentialsId: 'HIT', url: 'https://github.com/NetanelPeduim/finalProject.git']]]
-                result = sh (script: "git log -1 | grep 'v*'", returnStatus: true)
+                script {result = sh (script: "git log -1 | grep 'v*'", returnStatus: true)
                 if (result != 0) {
                     deployToProd = true
-                }
+                }}
             }
         }
         stage('Build Container') {
@@ -74,7 +74,7 @@ pipeline {
             }
         }
         stage('Deploy To Prod') {
-            steps {
+            steps { script {
             echo 'shutting down application-qa container\n'
             sh 'docker stop $(docker ps -aq)'
             echo 'removing application-qa container\n'
@@ -87,7 +87,7 @@ pipeline {
             else {
                     echo 'skipping deployment to prod!\n'
                 }
-            }
+            }}
         }
     }
     post {
