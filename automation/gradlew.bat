@@ -41,7 +41,7 @@ if defined JAVA_HOME goto findJavaFromJavaHome
 set JAVA_EXE=java.exe
 %JAVA_EXE% -version >NUL 2>&1
 if "%ERRORLEVEL%" == "0" goto execute
-echo %JAVA_EXE%
+
 echo.
 echo ERROR: JAVA_HOME is not set and no 'java' command could be found in your PATH.
 echo.
@@ -52,8 +52,7 @@ goto fail
 
 :findJavaFromJavaHome
 set JAVA_HOME=%JAVA_HOME:"=%
-set JAVA_EXE=%JAVA_HOME%/java.exe
-echo %JAVA_EXE%
+set JAVA_EXE=%JAVA_HOME%/bin/java.exe
 
 if exist "%JAVA_EXE%" goto execute
 
